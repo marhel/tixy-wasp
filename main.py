@@ -16,8 +16,8 @@ def nice_random_color() -> pygame.Color:
 
 
 GRID_SIZE = 32
-CIRC_SIZE = 48
-TIMING_RUNS = 64
+CIRC_SIZE = 32
+TIMING_RUNS = 16
 primary = nice_random_color()
 white = pygame.Color(255, 255, 255)
 
@@ -36,24 +36,17 @@ def turn_color(color, num):
     color.hsva = tuple(v)
 
 
-def calculate_average(delta_nanos, nanos):
-    l = len(nanos)
-    nanos.append(delta_nanos)
-    if l >= TIMING_RUNS: nanos.pop(0)
-    if l == TIMING_RUNS:
-        avg_nanos = sum(nanos) / len(nanos)
-        return avg_nanos
-    return 0
-
-
-def render_average_timing(delta_nanos, nanos, iterations):
-    avg_nanos = calculate_average(delta_nanos, nanos)
+def render_average_timing(surface, name, avg_nanos, iterations):
     cells = GRID_SIZE * GRID_SIZE
     if avg_nanos:
         delta_text = font.render(
-            "%4.2f µs  %.1fM calls" % (avg_nanos / (GRID_SIZE * GRID_SIZE) / 1000.0, iterations * cells / 1000000.0),
+            "%.1f µs  %.1fM calls [%s]" % (
+                avg_nanos / (GRID_SIZE * GRID_SIZE) / 1000.0,
+                iterations * cells / 1000000.0,
+                name
+            ),
             False, white)
-        screen.blit(delta_text, dest=(4, 4))
+        surface.blit(delta_text, dest=(CIRC_SIZE, 2))
 
 
 def render_grid(surface, values):
@@ -72,12 +65,21 @@ def render_grid(surface, values):
         pygame.draw.circle(surface, color, [xpos, ypos], size / 2 - 1)
 
 
-def get_wasm_exports(fileName):
+def render(tixyhandler):
+    surface = pygame.Surface(size)
+    render_grid(surface, tixyhandler.generate_with_timing())
+    render_average_timing(surface, tixyhandler.lang, tixyhandler.avg_nanos,
+                          iterations)
+    return surface
+
+
+def get_wasm_exports(filename):
+    print("Loading WASM from " + filename)
     # Let's define the store, that holds the engine, that holds the compiler.
     store = Store(engine.JIT(Compiler))
 
     # get bytes from wasm module
-    wasm_bytes = open(fileName, 'rb').read()
+    wasm_bytes = open(filename, 'rb').read()
 
     # Let's compile the module to be able to execute it!
     module = Module(store, wasm_bytes)
@@ -89,35 +91,58 @@ def get_wasm_exports(fileName):
     return instance.exports
 
 
-def generate_grid_values(tixy):
-    time_seconds = (pygame.time.get_ticks() - base_ticks) / 1000.0
-    index = 0
-    values = []
-    for x in range(0, GRID_SIZE):
-        for y in range(0, GRID_SIZE):
-            values.append((x, y, tixy(time_seconds, index, x, y)))
-            index += 1
-    return values
+class TixyHandler:
+    def __init__(self, lang, filename):
+        self.tixy = get_wasm_exports(filename).tixy
+        self.nanos = []
+        self.avg_nanos = 0
+        self.lang = lang
+
+    def generate_grid_values(self):
+        time_seconds = (pygame.time.get_ticks() - base_ticks) / 1000.0
+        index = 0
+        values = []
+        for x in range(0, GRID_SIZE):
+            for y in range(0, GRID_SIZE):
+                values.append((x, y, self.tixy(time_seconds, index, x, y)))
+                index += 1
+        return values
+
+    def generate_with_timing(self):
+        start_nanos = time.perf_counter_ns()
+        values = self.generate_grid_values()
+        delta_nanos = time.perf_counter_ns() - start_nanos
+        self.calculate_average(delta_nanos, self.nanos)
+        return values
+
+    def calculate_average(self, delta_nanos, nanos):
+        runs = len(nanos)
+        nanos.append(delta_nanos)
+        if runs >= TIMING_RUNS: nanos.pop(0)
+        if runs == TIMING_RUNS:
+            self.avg_nanos = sum(nanos) / len(nanos)
 
 
 if __name__ == '__main__':
-    kou_tixy = get_wasm_exports(
-        'langs/kou/tixy.wasm'
-    ).tixy
-    rust_tixy = get_wasm_exports(
-        'langs/rust/target/wasm32-unknown-unknown/release/tixy.wasm'
-    ).tixy
+    kou = TixyHandler('kou', 'langs/kou/tixy.wasm')
+    rust = TixyHandler('rust', 'langs/rust/tixy.wasm')
+    kou2 = TixyHandler('kou2', 'langs/kou/tixy.wasm')
+    rust2 = TixyHandler('rust2', 'langs/rust/tixy.wasm')
 
     pygame.init()
-    font = pygame.font.Font(None, 24)
+    # use None fo pygame default font
+    # if your system doesn't find the font, try replacing path with output of :
+    # print(pygame.font.match_font('Courier'))
+    print("Creating font")
+    font = pygame.font.Font("/Library/Fonts/Courier New.ttf", 24)
     base_ticks = pygame.time.get_ticks()
     size = (GRID_SIZE + 2) * CIRC_SIZE, (GRID_SIZE + 2) * CIRC_SIZE
+    full_size = (2 * GRID_SIZE + 3) * CIRC_SIZE, (
+            2 * GRID_SIZE + 3) * CIRC_SIZE
     background = 0x2b, 0x2b, 0x2b
-    screen = pygame.display.set_mode(size)
+    screen = pygame.display.set_mode(full_size)
 
     iterations = 0
-    delta_nanos = 0
-    nanos = []
     while 1:
         iterations += 1
         if iterations % 3 == 0:
@@ -131,15 +156,12 @@ if __name__ == '__main__':
 
         if event.type == pygame.QUIT: sys.exit()
 
-        start_nanos = time.perf_counter_ns()
-        if iterations % 100 > 50:
-            values = generate_grid_values(rust_tixy)
-        else:
-            values = generate_grid_values(kou_tixy)
-        delta_nanos = time.perf_counter_ns() - start_nanos
-
         screen.fill(background)
-        render_average_timing(delta_nanos, nanos, iterations)
-        render_grid(screen, values)
+
+        corner = (GRID_SIZE + 1) * CIRC_SIZE
+        screen.blit(render(rust), [0, 0])
+        screen.blit(render(kou), [corner, 0])
+        screen.blit(render(kou2), [0, corner])
+        screen.blit(render(rust2), [corner, corner])
 
         pygame.display.flip()
