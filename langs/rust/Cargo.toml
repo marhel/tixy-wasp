@@ -1,0 +1,15 @@
+[package]
+name = "tixy"
+version = "0.1.0"
+authors = ["Martin Hellspong <martin.hellspong@factor10.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+
+[profile.release]
+lto = true
