@@ -1,0 +1,3 @@
+let tixy = fn (t float, i int, x int, y int) float {
+    t - float(x)
+}
