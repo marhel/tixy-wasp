@@ -89,7 +89,7 @@ def get_wasm_exports(fileName):
     return instance.exports
 
 
-def generate_grid_values():
+def generate_grid_values(tixy):
     time_seconds = (pygame.time.get_ticks() - base_ticks) / 1000.0
     index = 0
     values = []
@@ -101,9 +101,12 @@ def generate_grid_values():
 
 
 if __name__ == '__main__':
-    exports = get_wasm_exports(
-        'langs/rust/tixy/target/wasm32-unknown-unknown/release/tixy.wasm')
-    tixy = exports.tixy
+    kou_tixy = get_wasm_exports(
+        'langs/kou/tixy.wasm'
+    ).tixy
+    rust_tixy = get_wasm_exports(
+        'langs/rust/target/wasm32-unknown-unknown/release/tixy.wasm'
+    ).tixy
 
     pygame.init()
     font = pygame.font.Font(None, 24)
@@ -129,10 +132,14 @@ if __name__ == '__main__':
         if event.type == pygame.QUIT: sys.exit()
 
         start_nanos = time.perf_counter_ns()
-        values = generate_grid_values()
+        if iterations % 100 > 50:
+            values = generate_grid_values(rust_tixy)
+        else:
+            values = generate_grid_values(kou_tixy)
         delta_nanos = time.perf_counter_ns() - start_nanos
 
         screen.fill(background)
         render_average_timing(delta_nanos, nanos, iterations)
         render_grid(screen, values)
+
         pygame.display.flip()
