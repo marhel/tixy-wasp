@@ -1,4 +1,5 @@
 # TIXY-WASP: Tixy WebAssembly demo in Python
+# Heavily inspired by https://tixy.land/ by Martin Kleppe (@aemkei)
 
 from wasmer import engine, Store, Module, Instance
 from wasmer_compiler_cranelift import Compiler
