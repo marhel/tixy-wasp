@@ -18,6 +18,8 @@ def nice_random_color() -> pygame.Color:
 
 GRID_SIZE = 32
 CIRC_SIZE = 32
+X_GRIDS = 3
+Y_GRIDS = 2
 TIMING_RUNS = 16
 primary = nice_random_color()
 white = pygame.Color(255, 255, 255)
@@ -75,13 +77,13 @@ def render(tixyhandler):
 
 
 def get_wasm_exports(filename):
-    print("Loading WASM from " + filename)
+    print("Loading WASM from " + filename, end=" ")
     # Let's define the store, that holds the engine, that holds the compiler.
     store = Store(engine.JIT(Compiler))
 
     # get bytes from wasm module
     wasm_bytes = open(filename, 'rb').read()
-
+    print("[%d bytes]" % len(wasm_bytes))
     # Let's compile the module to be able to execute it!
     module = Module(store, wasm_bytes)
 
@@ -90,6 +92,13 @@ def get_wasm_exports(filename):
 
     # return the dict of exported functions
     return instance.exports
+
+
+def calculate_squares():
+    for y in range(0, Y_GRIDS):
+        for x in range(0, X_GRIDS):
+            corner = (GRID_SIZE + 1) * CIRC_SIZE
+            square.append([x * corner, y * corner])
 
 
 class TixyHandler:
@@ -127,8 +136,6 @@ class TixyHandler:
 if __name__ == '__main__':
     kou = TixyHandler('kou', 'langs/kou/tixy.wasm')
     rust = TixyHandler('rust', 'langs/rust/tixy.wasm')
-    kou2 = TixyHandler('kou2', 'langs/kou/tixy.wasm')
-    rust2 = TixyHandler('rust2', 'langs/rust/tixy.wasm')
 
     pygame.init()
     # use None fo pygame default font
@@ -138,10 +145,13 @@ if __name__ == '__main__':
     font = pygame.font.Font("/Library/Fonts/Courier New.ttf", 24)
     base_ticks = pygame.time.get_ticks()
     size = (GRID_SIZE + 2) * CIRC_SIZE, (GRID_SIZE + 2) * CIRC_SIZE
-    full_size = (2 * GRID_SIZE + 3) * CIRC_SIZE, (
-            2 * GRID_SIZE + 3) * CIRC_SIZE
+
+    full_size = (X_GRIDS * GRID_SIZE + X_GRIDS+1) * CIRC_SIZE, (
+            Y_GRIDS * GRID_SIZE + Y_GRIDS+1) * CIRC_SIZE
     background = 0x2b, 0x2b, 0x2b
     screen = pygame.display.set_mode(full_size)
+    square = []
+    calculate_squares()
 
     iterations = 0
     while 1:
@@ -160,9 +170,11 @@ if __name__ == '__main__':
         screen.fill(background)
 
         corner = (GRID_SIZE + 1) * CIRC_SIZE
-        screen.blit(render(rust), [0, 0])
-        screen.blit(render(kou), [corner, 0])
-        screen.blit(render(kou2), [0, corner])
-        screen.blit(render(rust2), [corner, corner])
+        screen.blit(render(rust), square[0])
+        screen.blit(render(kou), square[1])
+        # screen.blit(render(some_lang1), square[2])
+        # screen.blit(render(some_lang2), square[3])
+        # screen.blit(render(some_lang3), square[4])
+        # screen.blit(render(some_lang4), square[5])
 
         pygame.display.flip()
