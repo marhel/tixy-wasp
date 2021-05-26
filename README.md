@@ -18,7 +18,7 @@ The following keys can be used in the application:
 * escape - exit
 
 # The tixy function
-The required tixy function has the signature `float int int int -> int` which is
+The required tixy function has the signature `float int int int -> float` which is
 `float tixy(float t, int i, int x, int y)` in C syntax.
 
 * t is the time since start in fractional seconds, so t is unsurprisingly 2.4 after 2.4 seconds.
