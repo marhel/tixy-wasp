@@ -16,8 +16,8 @@ def nice_random_color() -> pygame.Color:
     return col
 
 
-GRID_SIZE = 32
-CIRC_SIZE = 32
+GRID_SIZE = 16
+CIRC_SIZE = 16
 X_GRIDS = 3
 Y_GRIDS = 2
 TIMING_RUNS = 16
@@ -136,13 +136,14 @@ class TixyHandler:
 if __name__ == '__main__':
     kou = TixyHandler('kou', 'langs/kou/tixy.wasm')
     rust = TixyHandler('rust', 'langs/rust/tixy.wasm')
+    assemblyscript = TixyHandler('assemblyscript', 'langs/assemblyscript/build/tixy.wasm')
 
     pygame.init()
     # use None fo pygame default font
     # if your system doesn't find the font, try replacing path with output of :
     # print(pygame.font.match_font('Courier'))
     print("Creating font")
-    font = pygame.font.Font("/Library/Fonts/Courier New.ttf", 24)
+    font = pygame.font.Font("/System/Library/Fonts/Supplemental/Courier New.ttf", 24)
     base_ticks = pygame.time.get_ticks()
     size = (GRID_SIZE + 2) * CIRC_SIZE, (GRID_SIZE + 2) * CIRC_SIZE
 
@@ -172,7 +173,7 @@ if __name__ == '__main__':
         corner = (GRID_SIZE + 1) * CIRC_SIZE
         screen.blit(render(rust), square[0])
         screen.blit(render(kou), square[1])
-        # screen.blit(render(some_lang1), square[2])
+        screen.blit(render(assemblyscript), square[2])
         # screen.blit(render(some_lang2), square[3])
         # screen.blit(render(some_lang3), square[4])
         # screen.blit(render(some_lang4), square[5])
