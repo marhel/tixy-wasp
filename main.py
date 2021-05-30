@@ -153,6 +153,7 @@ if __name__ == '__main__':
             Y_GRIDS * GRID_SIZE + Y_GRIDS+1) * CIRC_SIZE
     background = 0x2b, 0x2b, 0x2b
     screen = pygame.display.set_mode(full_size)
+    pygame.display.set_caption("TIXY WASP")
     square = []
     calculate_squares()
 
