@@ -144,7 +144,7 @@ if __name__ == '__main__':
     # if your system doesn't find the font, try replacing path with output of :
     # print(pygame.font.match_font('Courier'))
     print("Creating font")
-    font = pygame.font.Font("/System/Library/Fonts/Supplemental/Courier New.ttf", 24)
+    font = pygame.font.Font("font/SourceCodePro/SourceCodePro-Regular.ttf", 24)
     base_ticks = pygame.time.get_ticks()
     size = (GRID_SIZE + 2) * CIRC_SIZE, (GRID_SIZE + 2) * CIRC_SIZE
 
