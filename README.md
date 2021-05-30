@@ -17,6 +17,8 @@ The following keys can be used in the application:
 * spacebar - switch to a different color
 * escape - exit
 
+![image](images/pygame.png)
+
 # Run locally in the browser
 
     git clone https://github.com/marhel/tixy-wasp
@@ -27,6 +29,8 @@ Then open http://localhost:8080 in browser. This version deos not show any
 performance measurements due to trying to measure tiny timespans and
 the timer resolution in browsers is currently intentionally unreliable
 (due to Spectre mitigations).
+
+![image](images/browser.png)
 
 # The tixy function
 The required tixy function has the signature `float int int int -> float` which is
