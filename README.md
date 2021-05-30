@@ -3,12 +3,12 @@ This repo re-implements https://tixy.land/ in Python, using a WebAssembly functi
 
 The main purpose is showing Wasm-integration from multiple languages, and tixy is just a so much more playful demonstration than some boring `add(x, y)` test.
 
-# Run locally
+# Run locally with python
 
     git clone https://github.com/marhel/tixy-wasp
     cd tixy-wasp
     python3 -m venv venv
-    source ./venv/bin/activate
+    source ./venv/bin/activate # may be different on Windows
     pip3 install -r requirements.txt
     python3 main.py
 
@@ -16,6 +16,17 @@ The following keys can be used in the application:
 * enter - reset time
 * spacebar - switch to a different color
 * escape - exit
+
+# Run locally in the browser
+
+    git clone https://github.com/marhel/tixy-wasp
+    cd tixy-wasp
+    python3 -m http.server 8080
+
+Then open http://localhost:8080 in browser. This version deos not show any
+performance measurements due to trying to measure tiny timespans and
+the timer resolution in browsers is currently intentionally unreliable
+(due to Spectre mitigations).
 
 # The tixy function
 The required tixy function has the signature `float int int int -> float` which is
@@ -45,4 +56,13 @@ some_lang = TixyHandler('some_lang', 'langs/some_lang/tixy.wasm')
 ...
 screen.blit(render(some_lang), square[3])
 ```
+
+To include in the JavaScript version, edit main.js and add your language and wasm file:
+
+```javascript
+var some_lang = await CreateTixyHandler('some_lang', 'langs/some_lang/tixy.wasm')
+...
+ctx.drawImage(render(some_lang), ... square[3])
+```
+
 Then submit this as a PR, including the tixy.wasm-file to help those that haven't yet installed the (wasm-)toolchain for your language.

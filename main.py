@@ -5,7 +5,8 @@ from wasmer import engine, Store, Module, Instance
 from wasmer_compiler_cranelift import Compiler
 import sys, pygame
 import random, time
-
+from os.path import exists
+from os import getcwd
 
 def nice_random_color() -> pygame.Color:
     angle = random.randrange(0, 360)
@@ -17,7 +18,7 @@ def nice_random_color() -> pygame.Color:
 
 
 GRID_SIZE = 16
-CIRC_SIZE = 16
+CIRC_SIZE = 32
 X_GRIDS = 3
 Y_GRIDS = 2
 TIMING_RUNS = 16
