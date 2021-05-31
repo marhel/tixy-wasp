@@ -25,10 +25,11 @@ The following keys can be used in the application:
     cd tixy-wasp
     python3 -m http.server 8080
 
-Then open http://localhost:8080 in browser. This version deos not show any
-performance measurements due to trying to measure tiny timespans and
-the timer resolution in browsers is currently intentionally unreliable
-(due to Spectre mitigations).
+Then open http://localhost:8080 in a browser. This version does not show any
+performance measurements due to the fact that the timespans involved are very small
+(on the order of just one or two milliseconds to generate the grid once),
+and the timer resolution in browsers is currently intentionally unreliable in
+this range due to Spectre mitigations.
 
 ![image](images/browser.png)
 
