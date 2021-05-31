@@ -17,7 +17,7 @@ The following keys can be used in the application:
 * spacebar - switch to a different color
 * escape - exit
 
-![image](images/pygame.png)
+![screenshot of tixy wasm animations in pygame window](images/pygame.png)
 
 # Run locally in the browser
 
@@ -31,7 +31,7 @@ performance measurements due to the fact that the timespans involved are very sm
 and the timer resolution in browsers is currently intentionally unreliable in
 this range due to Spectre mitigations.
 
-![image](images/browser.png)
+![screenshot of tixy wasm animations in browser window](images/browser.png)
 
 # The tixy function
 The required tixy function has the signature `float int int int -> float` which is
