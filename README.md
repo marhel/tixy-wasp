@@ -51,7 +51,7 @@ Go to https://tixy.land to see some example functions, and it's possibly quicker
 
 # Add another language
 Add a script `lang/some_lang/compile.sh` that does whatever it takes to compile your tixy function producing a `lang/some_lang/tixy.wasm` file with this function exported.
-See the pre-existing immplementations under the lang folder.
+See the pre-existing implementations under the lang folder.
 
 Then edit main.py and add a TixyHandler for your wasm file, and replace one of the pre-existing duplicate renderings with your own.
 
