@@ -137,7 +137,7 @@ class TixyHandler:
 if __name__ == '__main__':
     kou = TixyHandler('kou', 'langs/kou/tixy.wasm')
     rust = TixyHandler('rust', 'langs/rust/tixy.wasm')
-    assemblyscript = TixyHandler('assemblyscript', 'langs/assemblyscript/build/tixy.wasm')
+    assemblyscript = TixyHandler('assemblyscript', 'langs/assemblyscript/tixy.wasm')
     zig = TixyHandler('zig', 'langs/zig/tixy.wasm')
 
     pygame.init()

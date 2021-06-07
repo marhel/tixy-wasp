@@ -47,9 +47,9 @@ function render_average_timing(gridCtx, name) {
 function render_grid(gridCtx, values) {
     for (let [x, y, value] of values) {
         // turn_color(white, (x + y) * 4 + iterations / 3.0)
-        let xpos = (1 + x) * CIRC_SIZE //+ CIRC_SIZE  
+        let xpos = (1 + x) * CIRC_SIZE //+ CIRC_SIZE
         let ypos = (1 + y) * CIRC_SIZE + CIRC_SIZE
-    
+
         let color = value > 0 ? primary : white
         let size = Math.abs(value * (CIRC_SIZE));
         if(size > CIRC_SIZE - 2) {
@@ -83,13 +83,13 @@ async function get_wasm_exports(filename) {
 }
 
 
-function calculate_squares() {  
+function calculate_squares() {
     square = []
     for (let y = 0; y < Y_GRIDS; y++) {
         for (let x = 0; x < X_GRIDS; x++) {
             let corner = (GRID_SIZE + 1) * CIRC_SIZE
             square.push([x * corner, y * corner + CIRC_SIZE * y])
-        }        
+        }
     }
     return square;
 }
@@ -97,7 +97,7 @@ function calculate_squares() {
 async function CreateTixyHandler(lang, filename, small = true) {
     var exports = await get_wasm_exports(filename)
     if(small) {
-        tixy = exports.tixy 
+        tixy = exports.tixy
     } else {
         tixy = (t, i, x, y) => exports.tixy(t, BigInt(i), BigInt(x), BigInt(y))
     }
@@ -105,7 +105,7 @@ async function CreateTixyHandler(lang, filename, small = true) {
 }
 
 class TixyHandler {
-    constructor(lang, tixy) {   
+    constructor(lang, tixy) {
         this.tixy = tixy
         this.base_ticks = performance.now()
         this.nanos = []
@@ -146,7 +146,7 @@ class TixyHandler {
         }
     }
 }
-     
+
 // var size = [(GRID_SIZE + 2) * CIRC_SIZE, (GRID_SIZE + 2) * CIRC_SIZE]
 
 var full_size = [(X_GRIDS * GRID_SIZE + X_GRIDS+1) * CIRC_SIZE, (
@@ -158,7 +158,7 @@ var square = calculate_squares()
 async function renderGrids() {
     var kou = await CreateTixyHandler('kou', 'langs/kou/tixy.wasm')
     var rust = await CreateTixyHandler('rust', 'langs/rust/tixy.wasm')
-    var assemblyscript = await CreateTixyHandler('assemblyscript', 'langs/assemblyscript/build/tixy.wasm')
+    var assemblyscript = await CreateTixyHandler('assemblyscript', 'langs/assemblyscript/tixy.wasm')
     var zig = await CreateTixyHandler('zig', 'langs/zig/tixy.wasm', false)
     var base_ticks = performance.now()
     console.log("rendering...")
@@ -171,14 +171,14 @@ async function renderGrids() {
         if(iterations % 3 == 0)
         {
             // twist_color(primary)
-        }   
-        
+        }
+
         /*for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_ESCAPE: sys.exit()
         if event.key == pygame.K_SPACE: primary = nice_random_color()
         if event.key == pygame.K_RETURN: base_ticks = pygame.time.get_ticks()
-        
+
         if event.type == pygame.QUIT: sys.exit()
         */
 
