@@ -8,7 +8,8 @@ The main purpose is showing Wasm-integration from multiple languages, and tixy i
     git clone https://github.com/marhel/tixy-wasp
     cd tixy-wasp
     python3 -m venv venv
-    source ./venv/bin/activate # may be different on Windows
+    source venv/Scripts/activate # for bash on Windows, .bat and .ps1 versions in the same folder
+    source venv/bin/activate # On macOS/Linux
     pip3 install -r requirements.txt
     python3 main.py
 
