@@ -14,11 +14,12 @@ The main purpose is showing Wasm-integration from multiple languages, and tixy i
     python3 main.py
 
 The following keys can be used in the application:
+
 * enter - reset time
 * spacebar - switch to a different color
 * escape - exit
 
-![screenshot of tixy wasm animations in pygame window](images/pygame.png)
+![tixy wasm animation](images/tixy-wasm-r16-640.gif)
 
 # Run locally in the browser
 
