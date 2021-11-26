@@ -52,6 +52,9 @@ So -1.0 is a big colored dot. 1.0 is a big white dot. -0.2 is a small colored do
 Go to https://tixy.land to see some example functions, and it's possibly quicker to experiment there as well.
 
 # Add another language
+Look at https://github.com/appcypher/awesome-wasm-langs or other resources to find a language that can compile to WASM.
+Implement the tixy function in this language.
+
 Add a script `lang/some_lang/compile.sh` that does whatever it takes to compile your tixy function producing a `lang/some_lang/tixy.wasm` file with this function exported.
 See the pre-existing implementations under the lang folder.
 
