@@ -160,6 +160,7 @@ async function renderGrids() {
     var rust = await CreateTixyHandler('rust', 'langs/rust/tixy.wasm')
     var assemblyscript = await CreateTixyHandler('assemblyscript', 'langs/assemblyscript/tixy.wasm')
     var zig = await CreateTixyHandler('zig', 'langs/zig/tixy.wasm', false)
+    var c = await CreateTixyHandler('c', 'langs/c/tixy.wasm')
     var base_ticks = performance.now()
     console.log("rendering...")
     var canvas = document.getElementById("gameCanvas");
@@ -186,6 +187,7 @@ async function renderGrids() {
        ctx.drawImage(render(kou), ... square[1])
        ctx.drawImage(render(assemblyscript), ... square[2])
        ctx.drawImage(render(zig), ... square[3])
+       ctx.drawImage(render(c), ... square[4])
        // ctx.drawImage(render(some_lang3), square[4])
        // ctx.drawImage(render(some_lang4), square[5])
        window.requestAnimationFrame(animate);
