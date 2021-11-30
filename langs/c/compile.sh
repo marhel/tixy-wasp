@@ -3,7 +3,7 @@
 set -ex
 
 docker build -t llvm - <<EOF
-  FROM ubuntu
+  FROM ubuntu:20.04
   RUN apt update
   RUN apt install -y llvm lld clang
 EOF
