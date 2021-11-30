@@ -139,6 +139,7 @@ if __name__ == '__main__':
     rust = TixyHandler('rust', 'langs/rust/tixy.wasm')
     assemblyscript = TixyHandler('assemblyscript', 'langs/assemblyscript/tixy.wasm')
     zig = TixyHandler('zig', 'langs/zig/tixy.wasm')
+    c = TixyHandler('c', 'langs/c/tixy.wasm')
 
     pygame.init()
     # use None fo pygame default font
@@ -178,6 +179,7 @@ if __name__ == '__main__':
         screen.blit(render(kou), square[1])
         screen.blit(render(assemblyscript), square[2])
         screen.blit(render(zig), square[3])
+        screen.blit(render(c), square[4])
         # screen.blit(render(some_lang1), square[2])
         # screen.blit(render(some_lang2), square[3])
         # screen.blit(render(some_lang3), square[4])
